@@ -1,10 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { 
+  StyleSheet, 
+  Text, 
+  View, 
+  Button, 
+} from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import DBTestScreen from './screens/DBTestScreen';
+import UserBaseScreen from './screens/UserBaseScreen';
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
@@ -14,9 +20,10 @@ export default function App() {
     //   <DBTestScreen></DBTestScreen>
     // </View>
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Test" component={DBTestScreen} />
-      </Stack.Navigator>
+      <Tab.Navigator>
+        <Tab.Screen name="Test" component={ DBTestScreen } />
+        <Tab.Screen name="user" component={ UserBaseScreen } />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
