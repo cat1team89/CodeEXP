@@ -22,7 +22,13 @@ export default function App() {
     <NavigationContainer>
       <Tab.Navigator>
         <Tab.Screen name="Test" component={ DBTestScreen } />
-        <Tab.Screen name="user" component={ UserBaseScreen } />
+        <Tab.Screen 
+          name="Me"
+          component={ UserBaseScreen }
+          options={{
+            headerShown: false,
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
