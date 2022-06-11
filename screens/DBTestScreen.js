@@ -51,7 +51,7 @@ export default function DBTestScreen() {
         })
         setEvents(res);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   }, []);
 
     
