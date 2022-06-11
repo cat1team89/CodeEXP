@@ -7,6 +7,7 @@ import {
   StyleSheet, 
   Text, 
   View,
+  Image,
   TextInput,
 } from 'react-native';
 import {
@@ -15,10 +16,12 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth, db } from "../../database/firestore";
+import { ref, getDownloadURL } from 'firebase/storage';
+import { auth, db, storage } from "../../database/firestore";
 
 export default function UserAuthedScreen({ navigation }) {
   let [ userDetails, setUserDetails ] = useState({});
+  let [ picUrl, setPicUrl ] = useState('');
   
   const user = auth.currentUser;
 
@@ -33,6 +36,21 @@ export default function UserAuthedScreen({ navigation }) {
     }
   }, []);
 
+  useEffect(() => {
+    const picPath = userDetails.picpath;
+    if (picPath) {
+      const picRef = ref(storage, picPath);
+      getDownloadURL(picRef)
+        .then((url) => {
+          console.log(url);
+          setPicUrl(url);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+  }, [userDetails]);
+
   async function getUserInfo(email) {
     const userCollectionRef = collection(db, 'user')
     const userSnap = await getDoc(doc(userCollectionRef, email));
@@ -42,6 +60,7 @@ export default function UserAuthedScreen({ navigation }) {
       fname: data.uFirstname,
       lname: data.uLastname,
       bio: data.uBio,
+      picpath: data.uPicPath,
     };
   };
 
@@ -51,13 +70,24 @@ export default function UserAuthedScreen({ navigation }) {
   };
 
 
+  // TODO: fetch dp from firebase
+  const renderImage = () => {
+    return (
+      <Image 
+          defaultSource={ require('../../assets/default.png') }
+          source={ picUrl } 
+          resizeMode='contain'
+          style={ styles.image }
+        />
+    );
+  };
+
   const renderSignedIn = () => {
     if (userDetails.email) {
       return (
-        <View>
-          <Text>User Has Signed In</Text>
-          <Text>Name: { userDetails.fname } { userDetails.lname }</Text>
-          <Text>Bio: { userDetails.bio }</Text>
+        <View style={ styles.userDetailsContainer } >
+          <Text style={ styles.name } >{ userDetails.fname } { userDetails.lname }</Text>
+          <Text style={ styles.bio } >{ userDetails.bio }</Text>
         </View>
       );
     } else {
@@ -65,11 +95,66 @@ export default function UserAuthedScreen({ navigation }) {
         <Text>User Details Not Fetched</Text>
       );
     }
-  }
+  };
 
   return (
-    <View>
+    <View style={ styles.mainContainer } >
+      <View style={ styles.imageContainer } >
+        <Image 
+          defaultSource={ require('../../assets/default.png') }
+          source={ picUrl } 
+          resizeMode='contain'
+          style={ styles.image }
+        />
+      </View>
       { renderSignedIn() }
     </View>
   );
-}
+};
+
+const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'column', 
+    justifyContent: 'space-evenly',
+    backgroundColor: 'lightgrey',
+    borderRadius: '5%',
+    marginVertical: '20%',
+    marginHorizontal: '5%',
+  },
+
+  imageContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // borderColor: 'red',
+    // borderWidth: 5,
+  },
+
+  image: {
+    aspectRatio: '1/1',
+    width: '75%',
+    borderColor: 'grey',
+    borderWidth: 5,
+    borderRadius: '100%',
+  },
+
+  userDetailsContainer: {
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    // borderColor: 'blue',
+    // borderWidth: 5,
+  },
+
+  name: {
+    fontSize: 30,
+    marginBottom: 30,
+  },
+
+  bio: {
+    fontSize: 20,
+    width: '80%',
+    textAlign: 'center',
+  },
+});
