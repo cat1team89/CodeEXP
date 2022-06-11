@@ -9,13 +9,13 @@ import {
   View,
   Image,
   TextInput,
+  TouchableOpacity,
 } from 'react-native';
 import {
   collection,
   doc,
   getDoc,
 } from 'firebase/firestore';
-import { onAuthStateChanged } from 'firebase/auth';
 import { ref, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from "../../database/firestore";
 
@@ -31,8 +31,6 @@ export default function UserAuthedScreen({ navigation }) {
       getUserInfo(user.email)
         .then((userObj) => {setUserDetails(userObj)})
         .catch(err => console.error(err));
-    } else {
-      handleSignedOut();
     }
   }, []);
 
@@ -64,25 +62,7 @@ export default function UserAuthedScreen({ navigation }) {
     };
   };
 
-  // TODO: implement
-  const handleSignedOut = () => {
-    console.log('user not signed in');
-  };
-
-
-  // TODO: fetch dp from firebase
-  const renderImage = () => {
-    return (
-      <Image 
-          defaultSource={ require('../../assets/default.png') }
-          source={ picUrl } 
-          resizeMode='contain'
-          style={ styles.image }
-        />
-    );
-  };
-
-  const renderSignedIn = () => {
+  const renderUserInfo = () => {
     if (userDetails.email) {
       return (
         <View style={ styles.userDetailsContainer } >
@@ -97,17 +77,28 @@ export default function UserAuthedScreen({ navigation }) {
     }
   };
 
+  const handleLogout = () => {
+    auth.signOut().then(() => navigation.navigate('userLanding'));
+  };
+
   return (
-    <View style={ styles.mainContainer } >
-      <View style={ styles.imageContainer } >
-        <Image 
-          defaultSource={ require('../../assets/default.png') }
-          source={ picUrl } 
-          resizeMode='contain'
-          style={ styles.image }
-        />
+    <View>
+      <View style={ styles.mainContainer } >
+        <View style={ styles.imageContainer } >
+          <Image 
+            defaultSource={ require('../../assets/default.png') }
+            source={ picUrl } 
+            resizeMode='contain'
+            style={ styles.image }
+          />
+        </View>
+        { renderUserInfo() }
       </View>
-      { renderSignedIn() }
+      <TouchableOpacity onPress={ handleLogout } >
+        <Text style={ {textAlign: 'right'} }>
+          { (user) ? 'Log Out' : 'Go Back' }
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

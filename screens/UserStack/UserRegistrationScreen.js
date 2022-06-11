@@ -14,7 +14,9 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth, db } from "../../database/firestore";
+import { ref, uploadString } from "firebase/storage";
+import { launchImageLibrary } from 'react-native-image-picker/src';
+import { auth, db, storage } from "../../database/firestore";
 
 
 export default function UserRegistrationScreen({ navigation }) {
@@ -22,6 +24,8 @@ export default function UserRegistrationScreen({ navigation }) {
   let [ lname, setLname ] = useState('');
   let [ email, setEmail ] = useState('');
   let [ pw, setPw ] = useState('');
+  let [ photoStr, setPhotoStr ] = useState(null);
+  let [ photoUri, setPhotoUri ] = useState('');
 
   let [ fnameChecked, setFnameChecked ] = useState(false);
   let [ lnameChecked, setLnameChecked ] = useState(false);
@@ -57,6 +61,32 @@ export default function UserRegistrationScreen({ navigation }) {
     }
   };
 
+  // FIXME: error when running: 
+  // `TypeError: Cannot read properties of undefined (reading 'launchImageLibrary')`
+  const pickImageLibrary = () => {
+    let options = {
+      mediaType: 'photo',
+      includeBase64: true,
+    };
+    launchImageLibrary(options)
+      .then((response) => {
+        console.log('Response = ', response);
+        if (response.didCancel) {
+          console.log('User cancelled image picker');
+        } else if (response.errorCode) {
+          console.log('ImagePicker Error: ', response.errorMessage);
+        } else {
+          setPhotoStr(response.assets.base64);
+          setPhotoUri(response.assets.uri);
+          console.log(`base64: ${photoStr}`);
+          console.log(`uri: ${photoUri}`);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   async function handleSignUp() {
     createUserWithEmailAndPassword(auth, email, pw)
       .then((userCredential) => {
@@ -72,6 +102,9 @@ export default function UserRegistrationScreen({ navigation }) {
             console.log('Failed to add user info');
             console.error(err);
           });
+        if (photoStr) {
+          addUserPhoto(user.email);
+        }
       })
       .catch((authErr) => {
         console.log(authErr.code, '\n', authErr.message);
@@ -89,8 +122,15 @@ export default function UserRegistrationScreen({ navigation }) {
       console.log("User added with email: ", email);
     } catch (err) {
       console.error("Error adding user: ", err);
-      throw new Error('Unable to add user to DB');
     }
+  };
+
+  async function addUserPhoto(email) {
+    const storageRef = ref(storage, `profilepics/${email}`);
+    uploadString(storageRef, photoStr, 'base64')
+      .then((snapshot) => {
+        console.log(`Uploaded base64 str: ${photoStr}`);
+      });
   };
 
   const handleNav = () => {
@@ -137,6 +177,18 @@ export default function UserRegistrationScreen({ navigation }) {
         onChangeText={ newText => setPw(newText) }
         onBlur={ () => setPwChecked(true) }
       />
+
+      <Text>You can choose to add a profile picture</Text>
+      <TouchableOpacity 
+        onPress={ pickImageLibrary } 
+        style={{ width: '60%', alignSelf: 'center' }}
+      >
+        <Text style={{
+          textAlign: 'center', 
+          borderWidth: 3,
+          borderColor: 'grey',
+        }}>Choose from gallery</Text>
+      </TouchableOpacity>
 
       <Text style={ styles.warning }>{ renderSignUpErr() }</Text>
 
