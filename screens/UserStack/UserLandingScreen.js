@@ -3,7 +3,7 @@ import {
   Text,
   View,
   Button,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 
 

@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from 'firebase/firestore';
 import { getAuth, setPersistence, browserSessionPersistence } from 'firebase/auth';
+import { getStorage } from "firebase/storage";
 import { firebaseConfig } from './dbconfig';
 
 export const firebase = initializeApp(firebaseConfig);
@@ -16,4 +17,5 @@ setPersistence(auth, browserSessionPersistence)
   });
 export { auth };
 
+export const storage = getStorage(firebase);
 
