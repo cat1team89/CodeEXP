@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "lint": "eslint .",
-    "fix": "eslint . --fix"
+    "fix": "eslint . --fix",
+    "tunnel": "expo start --tunnel"
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^6.3.1",
@@ -17,11 +18,12 @@
     "@react-navigation/stack": "^6.2.1",
     "expo": "~45.0.0",
     "expo-status-bar": "~1.3.0",
+    "expo-image-picker": "~13.1.1",
     "firebase": "^9.8.2",
     "firebase-admin": "^10.2.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-native": "0.68.2",
+    "react-native": "^0.68.2",
     "react-native-web": "0.17.7"
   },
   "devDependencies": {
