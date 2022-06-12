@@ -8,13 +8,7 @@ import {
     doc
 } from 'firebase/firestore';
 import { firestore } from 'firebase-admin';
-
-/**
- * 
- * props should contain:
- *      id -> id of event being viewed
- *  
- */
+import { icons } from '../../misc/icons';
 
 export default function ViewEvents(props) {
     const [event, setEvent] = useState(null);
@@ -41,9 +35,10 @@ export default function ViewEvents(props) {
         );
     } else {
         console.log(eventCreator);
+        console.log(event.activity_type);
         return (
             <View>
-                <Image source={{uri: event.image}} style={{height: 200, width: 250}}/>
+                {icons[event.activity_type].icon}
                 <Text>{event.title}</Text>
                 <Text>When: {event.datetime}</Text>
                 <Text>Where: {event.location}</Text>

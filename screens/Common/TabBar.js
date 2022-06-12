@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateEventScreen from '../EventScreens/CreateEventScreen';
 import UserBaseScreen from '../UserBaseScreen';
+import ViewEventScreen from '../EventScreens/ViewEventScreen';
 
 /**
  * Sort of done by shengbin already haha but idk i might as well extract it out here in case we want it
