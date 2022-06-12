@@ -1,16 +1,19 @@
-import React, {
-  useState,
-  useEffect, 
-  useRef,
-} from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   StyleSheet, 
   Text, 
   View,
   Image,
-  TextInput,
   TouchableOpacity,
 } from 'react-native';
+import { DrawerActions } from '@react-navigation/native';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+  DrawerItem
+} from '@react-navigation/drawer';
+import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   collection,
   doc,
@@ -20,7 +23,7 @@ import { signOut } from "firebase/auth";
 import { ref, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from "../../database/firestore";
 
-export default function UserAuthedScreen({ navigation }) {
+function LoadUserProfile({ navigation }) {
   let [ userDetails, setUserDetails ] = useState({});
   let [ picUrl, setPicUrl ] = useState('');
   
@@ -78,10 +81,6 @@ export default function UserAuthedScreen({ navigation }) {
     }
   };
 
-  const handleLogout = () => {
-    signOut(auth).then(() => navigation.navigate('userLanding'));
-  };
-
   return (
     <View>
       <View style={ styles.mainContainer } >
@@ -95,12 +94,51 @@ export default function UserAuthedScreen({ navigation }) {
         </View>
         { renderUserInfo() }
       </View>
-      <TouchableOpacity onPress={ handleLogout } >
-        <Text style={ {textAlign: 'right'} }>
-          { (user) ? 'Log Out' : 'Go Back' }
-        </Text>
-      </TouchableOpacity>
     </View>
+  );
+};
+
+
+const Drawer = createDrawerNavigator();
+
+export default function UserAuthedScreen({ navigation }) {
+  function OptionsMenu(props) {
+    const handleLogout = () => {
+      signOut(auth).then(() => {
+        const parent = navigation.getParent();
+        parent.navigate('userLanding');
+      });
+    };
+  
+    return (
+      <DrawerContentScrollView {...props}>
+        <DrawerItemList {...props} />
+        <DrawerItem label="Log Out" onPress={ handleLogout } />
+      </DrawerContentScrollView>
+    );
+  };
+
+  return (
+    <Drawer.Navigator
+      useLegacyImplementation={ true }
+      drawerContent={ (props) => (<OptionsMenu {...props} />) }
+      screenOptions={{
+        drawerPosition:'right',
+      }}
+    >
+      <Drawer.Screen 
+        name="Profile" 
+        component={ LoadUserProfile }
+        options={{
+          headerLeft: false,
+          headerRight: () => (
+            <TouchableOpacity  onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+              <Ionicons name="menu" size={30} color="black" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+    </Drawer.Navigator>
   );
 };
 
