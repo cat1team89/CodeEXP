@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
+/**
+ * Sort of done by shengbin already haha but idk i might as well extract it out here in case we want it
+ */
+
 const tabBar = createBottomTabNavigator();
 
 export default function TabBar(props) {
