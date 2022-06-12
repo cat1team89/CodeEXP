@@ -16,6 +16,7 @@ import {
   doc,
   getDoc,
 } from 'firebase/firestore';
+import { signOut } from "firebase/auth";
 import { ref, getDownloadURL } from 'firebase/storage';
 import { auth, db, storage } from "../../database/firestore";
 
@@ -78,7 +79,7 @@ export default function UserAuthedScreen({ navigation }) {
   };
 
   const handleLogout = () => {
-    auth.signOut().then(() => navigation.navigate('userLanding'));
+    signOut(auth).then(() => navigation.navigate('userLanding'));
   };
 
   return (

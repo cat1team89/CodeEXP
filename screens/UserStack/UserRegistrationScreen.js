@@ -5,17 +5,15 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import {
-  collection,
   doc,
-  getDocs,
-  addDoc,
   setDoc,
 } from 'firebase/firestore';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, uploadString } from "firebase/storage";
-import { launchImageLibrary } from 'react-native-image-picker/src';
+import * as ImagePicker from 'expo-image-picker';
 import { auth, db, storage } from "../../database/firestore";
 
 
@@ -52,7 +50,22 @@ export default function UserRegistrationScreen({ navigation }) {
     } else {
       return null;
     }
-  }
+  };
+
+  const renderImagePreview = () => {
+    if (photoUri) {
+      return (
+        <Image 
+            defaultSource={ photoUri }
+            source={ photoUri } 
+            resizeMode='contain'
+            style={ styles.imagePreview }
+          />
+      )
+    } else {
+      return null;
+    }
+  };
 
   const handleInputsValidation = () => {
     const requiredInputs = [fname, lname, email, pw];
@@ -61,25 +74,19 @@ export default function UserRegistrationScreen({ navigation }) {
     }
   };
 
-  // FIXME: error when running: 
-  // `TypeError: Cannot read properties of undefined (reading 'launchImageLibrary')`
-  const pickImageLibrary = () => {
+  const handlePickImage = () => {
     let options = {
-      mediaType: 'photo',
-      includeBase64: true,
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      base64: true,
     };
-    launchImageLibrary(options)
-      .then((response) => {
-        console.log('Response = ', response);
-        if (response.didCancel) {
+    ImagePicker.launchImageLibraryAsync(options)
+      .then((result) => {
+        console.log('result = ', result);
+        if (result.cancelled === true) {
           console.log('User cancelled image picker');
-        } else if (response.errorCode) {
-          console.log('ImagePicker Error: ', response.errorMessage);
         } else {
-          setPhotoStr(response.assets.base64);
-          setPhotoUri(response.assets.uri);
-          console.log(`base64: ${photoStr}`);
-          console.log(`uri: ${photoUri}`);
+          setPhotoStr(result.base64);
+          setPhotoUri(result.uri);
         }
       })
       .catch((err) => {
@@ -118,6 +125,7 @@ export default function UserRegistrationScreen({ navigation }) {
         uFirstname: fname,
         uLastname: lname,
         uBio: 'No bio',
+        uPicPath: `profilepics/${email}`,
       });
       console.log("User added with email: ", email);
     } catch (err) {
@@ -129,7 +137,7 @@ export default function UserRegistrationScreen({ navigation }) {
     const storageRef = ref(storage, `profilepics/${email}`);
     uploadString(storageRef, photoStr, 'base64')
       .then((snapshot) => {
-        console.log(`Uploaded base64 str: ${photoStr}`);
+        console.log(`Uploaded base64 str for : ${email}`);
       });
   };
 
@@ -172,7 +180,6 @@ export default function UserRegistrationScreen({ navigation }) {
       <TextInput
         style = { styles.input }
         label='Password here'
-        keyboardType="email-address"
         secureTextEntry={ true }
         onChangeText={ newText => setPw(newText) }
         onBlur={ () => setPwChecked(true) }
@@ -180,8 +187,8 @@ export default function UserRegistrationScreen({ navigation }) {
 
       <Text>You can choose to add a profile picture</Text>
       <TouchableOpacity 
-        onPress={ pickImageLibrary } 
-        style={{ width: '60%', alignSelf: 'center' }}
+        onPress={ handlePickImage } 
+        style={{ width: '40%', alignSelf: 'center' }}
       >
         <Text style={{
           textAlign: 'center', 
@@ -189,6 +196,13 @@ export default function UserRegistrationScreen({ navigation }) {
           borderColor: 'grey',
         }}>Choose from gallery</Text>
       </TouchableOpacity>
+      {/* <Text>Or Use a base64 string { ':\'\(' }</Text>
+      <TextInput
+        style = { styles.input }
+        label='base64 string'
+        onChangeText={ newText => setPhotoStr(newText) }
+      /> */}
+      { renderImagePreview() }
 
       <Text style={ styles.warning }>{ renderSignUpErr() }</Text>
 
@@ -231,5 +245,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
+  },
+
+  imagePreview: {
+    alignSelf: 'center',
+    aspectRatio: '1/1',
+    width: '30%',
+    borderColor: 'grey',
+    borderWidth: 5,
+    borderRadius: '100%',
   },
 });
