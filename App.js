@@ -7,8 +7,7 @@ import {
 } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import DBTestScreen from './screens/DBTestScreen';
-import UserBaseScreen from './screens/UserBaseScreen';
+import TabBar from './screens/Common/TabBar';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,16 +19,7 @@ export default function App() {
     //   <DBTestScreen></DBTestScreen>
     // </View>
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Test" component={ DBTestScreen } />
-        <Tab.Screen 
-          name="Me"
-          component={ UserBaseScreen }
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Tab.Navigator>
+      <TabBar />
     </NavigationContainer>
   );
 }
