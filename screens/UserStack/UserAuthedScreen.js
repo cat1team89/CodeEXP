@@ -50,7 +50,7 @@ function LoadUserProfile({ navigation }) {
         .catch((err) => {
           console.error(err);
         });
-    }
+    };
   }, [userDetails]);
 
   async function getUserInfo(email) {
@@ -103,23 +103,39 @@ const Drawer = createDrawerNavigator();
 
 export default function UserAuthedScreen({ navigation }) {
   function OptionsMenu(props) {
+    const handleNavHelplines = () => {
+      // const parent = navigation.getParent();
+      // parent.navigate('Help Lines');
+      navigation.navigate('Help Lines');
+    };
+
     const handleLogout = () => {
       signOut(auth).then(() => {
-        const parent = navigation.getParent();
-        parent.navigate('userLanding');
+        // const parent = navigation.getParent();
+        // parent.navigate('Sign In');
+        navigation.navigate('Sign In');
+
       });
     };
   
     return (
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
-        <DrawerItem label="Log Out" onPress={ handleLogout } />
+        <DrawerItem 
+          label="Help Lines" 
+          onPress={ handleNavHelplines } 
+        />
+        <DrawerItem
+          label="Log Out"
+          onPress={ handleLogout }
+        />
       </DrawerContentScrollView>
     );
   };
 
   return (
     <Drawer.Navigator
+      // initialRouteName='My Profile'
       useLegacyImplementation={ true }
       drawerContent={ (props) => (<OptionsMenu {...props} />) }
       screenOptions={{
@@ -127,7 +143,7 @@ export default function UserAuthedScreen({ navigation }) {
       }}
     >
       <Drawer.Screen 
-        name="Profile" 
+        name="My Profile" 
         component={ LoadUserProfile }
         options={{
           headerLeft: false,

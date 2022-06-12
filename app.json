@@ -31,7 +31,7 @@
       "permissions": []
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/custom-favicon.png"
     },
     "plugins": [
       [

@@ -10,10 +10,10 @@ import {
 export default function UserLandingScreen({ navigation }) {
   return (
     <View>
-      <Text>User Lands Here</Text>
+      <Text>Please Sign In to view your profile</Text>
       <TouchableOpacity 
         style={ styles.button }
-        onPress={() => navigation.navigate('Login')} 
+        onPress={() => navigation.navigate('Sign In')} 
       >
         <Text style={ styles.buttonText } >Log In Here</Text>
       </TouchableOpacity>

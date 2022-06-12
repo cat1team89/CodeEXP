@@ -23,7 +23,7 @@ export default function TabBar(props) {
             />
             <tabBar.Screen
                 name="+"
-                component={() => <CreateEventScreen />}
+                component={ CreateEventScreen }
             />
             <tabBar.Screen
                 name="Chats"
@@ -31,7 +31,10 @@ export default function TabBar(props) {
             />
             <tabBar.Screen
                 name="My Profile"
-                component={() => <UserBaseScreen />} // TODO: paste in view user profile component JSX
+                component={ UserBaseScreen }
+                options={{
+                    headerShown: false,
+                }}
             />
         </tabBar.Navigator>
     );

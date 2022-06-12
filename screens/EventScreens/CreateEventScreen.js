@@ -8,7 +8,7 @@ import {
     addDoc,
     doc,
 } from 'firebase/firestore';
-import { firestore } from 'firebase-admin';
+// import { firestore } from 'firebase-admin';
 import { SafeAreaView, TextInput } from 'react-native-web';
 import * as ImagePicker from 'expo-image-picker';
 import { getAuth } from "firebase/auth";

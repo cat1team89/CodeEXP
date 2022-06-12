@@ -6,13 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {
-  collection,
-  doc,
-  getDocs,
-  addDoc,
-  setDoc,
-} from 'firebase/firestore';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../database/firestore";
 
@@ -31,6 +24,32 @@ export default function UserLoginScreen({ navigation }) {
         return ( <Text style={ styles.warning }>Required input cannot be empty!</Text> )
       }
     }
+  };
+
+  const renderRegisterLink = () => {
+    return (
+      <Text>
+        { 'New to us? Sign up ' }
+        <Text 
+          style={{ textDecorationLine: 'underline', color: 'blue' }} 
+          onPress={ () => {navigation.navigate('Register')} }
+        >here</Text>
+        { '.' }
+      </Text>
+    )
+  };
+
+  const renderHelplineLink = () => {
+    return (
+      <Text>
+        { 'Wish to seek help? Tap ' }
+        <Text 
+          style={{ textDecorationLine: 'underline', color: 'blue' }} 
+          onPress={ () => {navigation.navigate('Help Lines')} }
+        >here</Text>
+        { '.' }
+      </Text>
+    )
   };
 
   const handleInputsValidation = () => {
@@ -60,7 +79,7 @@ export default function UserLoginScreen({ navigation }) {
 
   return (
     <View>
-      <Text style={ {padding: 10} } >User Login Here</Text>
+      <Text style={ {padding: 10} } >Please Login to view your profile</Text>
 
       <Text>Email *  { renderWarning(email, emailChecked) }</Text>
       <TextInput
@@ -75,7 +94,6 @@ export default function UserLoginScreen({ navigation }) {
       <TextInput
         style = { styles.input }
         label='Password here'
-        keyboardType="email-address"
         secureTextEntry={ true }
         onChangeText={ newText => setPw(newText) }
         onBlur={ () => setPwChecked(true) }
@@ -87,6 +105,12 @@ export default function UserLoginScreen({ navigation }) {
       >
         <Text style={ styles.buttonText } >LOG IN</Text>
       </TouchableOpacity>
+
+      <View>
+        { renderRegisterLink() }
+        { renderHelplineLink() }
+      </View>
+
     </View>
   );
 };
