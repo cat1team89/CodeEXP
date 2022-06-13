@@ -3,6 +3,9 @@ import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateEventScreen from '../EventScreens/CreateEventScreen';
 import UserBaseScreen from '../UserBaseScreen';
+import BrowseEvents from '../Menu/BrowseEvents';
+import BrowseProfiles from '../Menu/BrowseProfiles';
+
 
 /**
  * Sort of done by shengbin already haha but idk i might as well extract it out here in case we want it
@@ -15,11 +18,11 @@ export default function TabBar(props) {
         <tabBar.Navigator>
             <tabBar.Screen
                 name="Profiles"
-                component={() => <Text>Under Construction</Text>} // TODO: paste in profile menu component JSX
+                component={() => <BrowseProfiles/>} // TODO: paste in profile menu component JSX
             />
             <tabBar.Screen 
                 name="Events"
-                component={() => <Text>Under Construction</Text>} // TODO: paste in events menu component JSX
+                component={() => <BrowseEvents/>} // TODO: paste in events menu component JSX
             />
             <tabBar.Screen
                 name="+"

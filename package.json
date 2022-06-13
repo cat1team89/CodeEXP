@@ -29,7 +29,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-native": "^0.68.2",
-    "react-native-select-dropdown": "^2.0.3",
+    "react-native-autocomplete": "^0.4.0",
+    "react-native-elements": "^3.4.2",
     "react-native-web": "0.17.7"
   },
   "devDependencies": {
