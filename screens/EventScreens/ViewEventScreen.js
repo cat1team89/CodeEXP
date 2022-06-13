@@ -7,7 +7,6 @@ import {
     getDoc,
     doc
 } from 'firebase/firestore';
-// import { firestore } from 'firebase-admin';
 
 /**
  * 
