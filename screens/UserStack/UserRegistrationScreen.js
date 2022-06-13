@@ -14,8 +14,7 @@ import {
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { ref, uploadString } from "firebase/storage";
 import * as ImagePicker from 'expo-image-picker';
-import SelectDropdown from 'react-native-select-dropdown';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { auth, db, storage } from "../../database/firestore";
 import { ARMY_CAMPS } from '../../util/SAF-Info';
 
@@ -32,7 +31,7 @@ export default function UserRegistrationScreen({ navigation }) {
 
   let [ signUpErr, setSignUpErr ] = useState('');
 
-  let [ selectedCamp, setSelectedCamp ] = useState('');
+  let [ selectedCamp, setSelectedCamp ] = useState(ARMY_CAMPS[0]);
 
   const renderEmptyFieldWarning = () => {
     if (hasEmptyField) {
@@ -89,12 +88,19 @@ export default function UserRegistrationScreen({ navigation }) {
     return (
       <Picker
         selectedValue={ selectedCamp }
-        onValueChange={(itemValue, itemIndex) => setSelectedCamp(itemValue)}
+        onValueChange={(itemValue, itemIndex) => {
+          handlePickCamp(itemValue);
+        }}
         style={{ width: '60%', alignSelf: 'center' }}
       >
         { campItems }
       </Picker>
     )
+  };
+
+  const handlePickCamp = (itemValue) => {
+    console.log(`itemValue: ${itemValue}`);
+    setSelectedCamp(itemValue);
   };
 
   const handleCheckNotEmpty = (field) => {
@@ -106,9 +112,11 @@ export default function UserRegistrationScreen({ navigation }) {
   };
 
   const handleInputsValidation = () => {
-    const requiredInputs = [fname, lname, email, pw];
+    const requiredInputs = [fname, lname, email, pw, selectedCamp];
     if (requiredInputs.every((input) => input.trim().length !== 0)) {
       handleSignUp();
+    } else {
+      setHasEmptyField(true);
     }
   };
 
@@ -164,12 +172,13 @@ export default function UserRegistrationScreen({ navigation }) {
 
   async function addUserToDB(email) {
     try {
-      const ref = await setDoc(doc(db, "user", email), {
+      console.log(fname, lname, bio, selectedCamp)
+      await setDoc(doc(db, "user", email), {
         uFirstname: fname,
         uLastname: lname,
         uBio: (bio.length !== 0) ? bio : 'No bio',
         uCamp: selectedCamp,
-        uPicPath: `profilepics/${email}`,  // `profilepics/` is directory in Firebase storage
+        uPicPath: photoStr ? `profilepics/${email}` : null,  // `profilepics/` is directory in Firebase storage
       });
       console.log("User added with email: ", email);
     } catch (err) {
@@ -199,7 +208,7 @@ export default function UserRegistrationScreen({ navigation }) {
         >First Name *</Text>
         <TextInput
           style={ styles.input }
-          label='First name here'
+          placeholder='First name here'
           autoCapitalize='words'
           onChangeText={ newText => setFname(newText.trim()) }
           onBlur={ () => handleCheckNotEmpty(fname) }
@@ -212,7 +221,7 @@ export default function UserRegistrationScreen({ navigation }) {
         >Last Name * </Text>
         <TextInput
           style={ styles.input }
-          label='Last name here'
+          placeholder='Last name here'
           autoCapitalize='words'
           onChangeText={ newText => setLname(newText.trim()) }
           onBlur={ () => handleCheckNotEmpty(lname) }
@@ -225,7 +234,7 @@ export default function UserRegistrationScreen({ navigation }) {
         >Email * </Text>
         <TextInput
           style={ styles.input }
-          label='Email here'
+          placeholder='Email here'
           keyboardType="email-address"
           onChangeText={ newText => setEmail(newText.trim()) }
           onBlur={ () => handleCheckNotEmpty(email) }
@@ -238,7 +247,7 @@ export default function UserRegistrationScreen({ navigation }) {
         >Password * </Text>
         <TextInput
           style={ styles.input }
-          label='Password here'
+          placeholder='Password here'
           secureTextEntry={ true }
           onChangeText={ newText => setPw(newText) }
           onBlur={ () => handleCheckNotEmpty(pw) }
@@ -246,34 +255,33 @@ export default function UserRegistrationScreen({ navigation }) {
       </View>
 
       <View style={ styles.entry } >
-        <Text style={ styles.textPrompt } >Camp{'  '}</Text>  {/* Spaces account for asterik in required fields */}
+        <Text 
+          style={ (!hasEmptyField || selectedCamp) ? styles.textPrompt : styles.textPromptWarn }
+        >Camp * </Text>
         <View style={ styles.dropdownInput } >
           { renderPicker() }
         </View>
       </View>
 
-      <Text>Profile Picture { '(optional)' }</Text>
-      <TouchableOpacity 
-        onPress={ handlePickImage } 
-        style={{ width: '40%', alignSelf: 'center' }}
-      >
-        <Text style={ styles.smallButton }>Choose from gallery</Text>
-      </TouchableOpacity>
-      {/* <Text>Or Use a base64 string { ':\'\(' }</Text>
-      <TextInput
-        style = { styles.input }
-        label='base64 string'
-        onChangeText={ newText => setPhotoStr(newText) }
-      /> */}
+      <View style={ styles.entry } >
+        <Text style={ styles.textPrompt } >Profile Picture </Text>
+        <TouchableOpacity 
+          onPress={ handlePickImage } 
+          style={ styles.imageInput }
+        >
+          <Text style={ styles.smallButton }>Choose from Gallery</Text>
+        </TouchableOpacity>
+
+      </View>
       { renderResetImageButton() }
       { renderImagePreview() }
 
       <View style={ styles.entry } >
-        <Text style={ styles.textPrompt } >Bio { '(optional)' } </Text>
+        <Text style={ styles.textPrompt } >Bio </Text>
         <TextInput
           style={ styles.multilineInput }
           multiline={ true }
-          label='Say something about yourself so others can know more about you :)'
+          placeholder='Say something about yourself :)'
           onChangeText={ newText => setBio(newText) }
         />
       </View>
@@ -292,31 +300,36 @@ export default function UserRegistrationScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   mainContainer: {
+    flex: 1,
     marginHorizontal: '5%',
+    marginTop: '10%',
   },
 
   entry: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    alignContent: 'space-between',
+    justifyContent: 'space-between',
   },
 
   textPrompt: {
-    flex: 1,
-    textAlign: 'right',
+    flex: 0.25,
+    // textAlign: 'right',
     padding: 10,
     marginRight: 5,
+    fontSize: 16,
   },
 
   textPromptWarn: {
-    flex: 1,
-    textAlign: 'right',
+    flex: 0.25,
+    // textAlign: 'right',
     padding: 10,
     marginRight: 5,
     color: 'red',
+    fontSize: 16,
   },
 
   input: {
-    flex: 3,
+    flex: 0.75,
     borderColor: "gray",
     // width: "100%",
     borderWidth: 1,
@@ -327,13 +340,19 @@ const styles = StyleSheet.create({
   },
 
   dropdownInput : {
-    flex: 3,
+    flex: 0.75,
     borderColor: "gray",
     // width: "100%",
     padding: 10,
   },
 
+  imageInput : {
+    flex: 0.75,
+    alignSelf: 'center',
+  },
+
   multilineInput: {
+    flex: 0.75,
     borderColor: "gray",
     width: "100%",
     borderWidth: 1,

@@ -20,11 +20,10 @@ export default function UserBaseScreen() {
       return 'Sign In';
     }
   }
-  // TODO: change back
+
   return (
     <Stack.Navigator
       initialRouteName={ handleInitialRoute() }
-      // initialRouteName={ 'userAuthed' }
     >
       <Stack.Screen 
         name="userLanding" 
