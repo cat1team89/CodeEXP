@@ -17,6 +17,7 @@ import { getAuth } from "firebase/auth";
 import { useFocusEffect, useCallback } from '@react-navigation/native';
 
 import { SearchBar } from 'react-native-elements';
+import { Icon } from 'react-native-elements'
 
 export default class App extends React.Component {
   state = {
@@ -32,12 +33,12 @@ export default class App extends React.Component {
 
     return (
       <SearchBar
-        placeholder="Search Profiles..."
+        placeholder="Type Here..."
         onChangeText={this.updateSearch}
         value={search}
+        
       />
     );
   }
-
 }
 

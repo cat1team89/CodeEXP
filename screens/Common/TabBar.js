@@ -6,6 +6,7 @@ import UserBaseScreen from '../UserBaseScreen';
 import BrowseEvents from '../Menu/BrowseEvents';
 import BrowseProfiles from '../Menu/BrowseProfiles';
 
+
 /**
  * Sort of done by shengbin already haha but idk i might as well extract it out here in case we want it
  */
