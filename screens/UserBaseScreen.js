@@ -6,6 +6,7 @@ import UserLandingScreen from './UserStack/UserLandingScreen';
 import UserLoginScreen from './UserStack/UserLoginScreen';
 import UserRegistrationScreen from './UserStack/UserRegistrationScreen';
 import UserAuthedScreen from './UserStack/UserAuthedScreen';
+import HelplineScreen from './UserStack/HelplineScreen';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +17,7 @@ export default function UserBaseScreen() {
     if (user) {
       return 'userAuthed';
     } else {
-      return 'userLanding';
+      return 'Sign In';
     }
   }
 
@@ -31,15 +32,16 @@ export default function UserBaseScreen() {
           headerShown: false,
         }} 
       />
-      <Stack.Screen name="Login" component={ UserLoginScreen } />
+      <Stack.Screen name="Sign In" component={ UserLoginScreen } />
       <Stack.Screen name="Register" component={ UserRegistrationScreen } />
       <Stack.Screen 
         name="userAuthed" 
-        component={ UserAuthedScreen }       
+        component={ UserAuthedScreen }
         options={{
           headerShown: false,
         }}
       />
+      <Stack.Screen name="Help Lines" component={ HelplineScreen } />
     </Stack.Navigator>
   );
 }

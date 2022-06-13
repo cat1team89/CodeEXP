@@ -6,13 +6,6 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import {
-  collection,
-  doc,
-  getDocs,
-  addDoc,
-  setDoc,
-} from 'firebase/firestore';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../database/firestore";
 
@@ -31,6 +24,37 @@ export default function UserLoginScreen({ navigation }) {
         return ( <Text style={ styles.warning }>Required input cannot be empty!</Text> )
       }
     }
+  };
+
+  const renderRegisterLink = () => {
+    return (
+      <View style={{ flexDirection: 'row-reverse', marginRight: '10%' }} >
+        <Text style={{ fontSize: 18 }} >
+          { 'New to us? Sign up ' }
+          <Text 
+            style={{ textDecorationLine: 'underline', color: 'blue', fontSize: 18 }} 
+            onPress={ () => {navigation.navigate('Register')} }
+          >here</Text>
+          { '.' }
+        </Text>
+      </View>
+    )
+  };
+
+  const renderHelplineLink = () => {
+    return (
+      <View style={ styles.helpLinkContainer } >
+        <Text style={ styles.helpLinkText } >Need some support to keep going?</Text>
+        <Text style={ styles.helpLinkText } >
+          { 'Tap ' }
+          <Text 
+            style={ styles.helpLinkClickText }
+            onPress={ () => {navigation.navigate('Help Lines')} }
+          >here</Text>
+          { '.' }
+        </Text>
+      </View>
+    )
   };
 
   const handleInputsValidation = () => {
@@ -59,42 +83,70 @@ export default function UserLoginScreen({ navigation }) {
   };
 
   return (
-    <View>
-      <Text style={ {padding: 10} } >User Login Here</Text>
+    <View style={ styles.mainContainer }>
 
-      <Text>Email *  { renderWarning(email, emailChecked) }</Text>
-      <TextInput
-        style = { styles.input }
-        label='Email here'
-        keyboardType="email-address"
-        onChangeText={ newText => setEmail(newText.trim()) }
-        onBlur={ () => setEmailChecked(true) }
-      />
+      <View style={ styles.entry } >
+        <Text style={ styles.textPrompt } >Email *  { renderWarning(email, emailChecked) }</Text>
+        <TextInput
+          style = { styles.input }
+          placeholder='Email here'
+          keyboardType="email-address"
+          onChangeText={ newText => setEmail(newText.trim()) }
+          onBlur={ () => setEmailChecked(true) }
+        />
+      </View>
 
-      <Text>Password *  { renderWarning(pw, pwChecked) }</Text>
-      <TextInput
-        style = { styles.input }
-        label='Password here'
-        keyboardType="email-address"
-        secureTextEntry={ true }
-        onChangeText={ newText => setPw(newText) }
-        onBlur={ () => setPwChecked(true) }
-      />
+      <View style={ styles.entry } >
+        <Text style={ styles.textPrompt } >Password *  { renderWarning(pw, pwChecked) }</Text>
+        <TextInput
+          style = { styles.input }
+          placeholder='Password here'
+          secureTextEntry={ true }
+          onChangeText={ newText => setPw(newText) }
+          onBlur={ () => setPwChecked(true) }
+        />
+      </View>
+
 
       <TouchableOpacity 
         style={ styles.button }
         onPress={ handleInputsValidation }
-      >
+        >
         <Text style={ styles.buttonText } >LOG IN</Text>
       </TouchableOpacity>
+
+      { renderRegisterLink() }
+
+      { renderHelplineLink() }
+
+
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    marginHorizontal: '5%',
+    marginTop: '10%',
+  },
+
+  entry: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+
+  textPrompt: {
+    flex: 0.25,
+    textAlign: 'right',
+    padding: 10,
+    marginRight: 5,
+    fontSize: 18,
+  },
+
   input: {
+    flex: 0.75,
     borderColor: "gray",
-    width: "100%",
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
@@ -120,5 +172,26 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
     textTransform: "uppercase",
+  },
+
+  helpLinkContainer: {
+    flex: 0.3,
+    marginTop: '20%',
+    borderRadius: 10,
+    borderWidth: 5,
+    borderColor: '#5a792c',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+
+  helpLinkText: {
+    fontSize: 18,
+  },
+
+  helpLinkClickText: {
+    fontSize: 18,
+    textDecorationLine: 'underline',
+    color: 'blue'
   },
 });
