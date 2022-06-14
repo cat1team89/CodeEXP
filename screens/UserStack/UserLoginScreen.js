@@ -13,16 +13,13 @@ export default function UserLoginScreen({ navigation }) {
   let [ email, setEmail ] = useState('');
   let [ pw, setPw ] = useState('');
 
-  let [ emailChecked, setEmailChecked ] = useState(false);
-  let [ pwChecked, setPwChecked ] = useState(false);
+  let [ hasEmptyField, setHasEmptyField ] = useState(false);
 
-  const renderWarning = (input, inputChecked) => {
-    if (!inputChecked) {
-      return null;
+  const renderEmptyFieldWarning = () => {
+    if (hasEmptyField) {
+      return ( <Text style={ styles.warning }>Required fields cannot be empty!</Text> )
     } else {
-      if (!input) {
-        return ( <Text style={ styles.warning }>Required input cannot be empty!</Text> )
-      }
+      return null;
     }
   };
 
@@ -57,6 +54,14 @@ export default function UserLoginScreen({ navigation }) {
     )
   };
 
+  const handleCheckNotEmpty = (field) => {
+    if (!field) {
+      setHasEmptyField(true);
+    } else {
+      setHasEmptyField(false);
+    }
+  };
+
   const handleInputsValidation = () => {
     const requiredInputs = [email, pw];
     if (requiredInputs.every((input) => input.trim().length !== 0)) {
@@ -84,26 +89,31 @@ export default function UserLoginScreen({ navigation }) {
 
   return (
     <View style={ styles.mainContainer }>
+      { renderEmptyFieldWarning() }
 
       <View style={ styles.entry } >
-        <Text style={ styles.textPrompt } >Email *  { renderWarning(email, emailChecked) }</Text>
+        <Text
+          style={ (!hasEmptyField || email) ? styles.textPrompt : styles.textPromptWarn }
+        >Email *</Text>
         <TextInput
           style = { styles.input }
           placeholder='Email here'
           keyboardType="email-address"
           onChangeText={ newText => setEmail(newText.trim()) }
-          onBlur={ () => setEmailChecked(true) }
+          onBlur={ () => handleCheckNotEmpty(email) }
         />
       </View>
 
       <View style={ styles.entry } >
-        <Text style={ styles.textPrompt } >Password *  { renderWarning(pw, pwChecked) }</Text>
+        <Text
+          style={ (!hasEmptyField || pw) ? styles.textPrompt : styles.textPromptWarn }
+        >Password *</Text>
         <TextInput
           style = { styles.input }
           placeholder='Password here'
           secureTextEntry={ true }
           onChangeText={ newText => setPw(newText) }
-          onBlur={ () => setPwChecked(true) }
+          onBlur={ () => handleCheckNotEmpty(pw) }
         />
       </View>
 
@@ -144,6 +154,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
+  textPromptWarn: {
+    flex: 0.25,
+    textAlign: 'right',
+    padding: 10,
+    marginRight: 5,
+    color: 'red',
+    fontSize: 16,
+  },
+
   input: {
     flex: 0.75,
     borderColor: "gray",
@@ -154,7 +173,10 @@ const styles = StyleSheet.create({
   },
 
   warning: {
+    alignSelf: 'center',
+    fontSize: 15,
     color: "red",
+    marginBottom: 10,
   },
 
   button: {

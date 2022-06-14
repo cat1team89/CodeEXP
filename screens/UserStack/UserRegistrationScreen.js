@@ -27,12 +27,12 @@ export default function UserRegistrationScreen({ navigation }) {
   let [ photoUri, setPhotoUri ] = useState('');
   let [ bio, setBio ] = useState('');
 
-  let [ hasEmptyField, setHasEmptyField ] = useState(false);
-
   let [ signUpErr, setSignUpErr ] = useState('');
-
+  
   let [ selectedCamp, setSelectedCamp ] = useState(ARMY_CAMPS[0]);
-
+  
+  let [ hasEmptyField, setHasEmptyField ] = useState(false);
+  
   const renderEmptyFieldWarning = () => {
     if (hasEmptyField) {
       return ( <Text style={ styles.warning }>Required fields cannot be empty!</Text> )
