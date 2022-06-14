@@ -5,6 +5,7 @@ import {
   View,
   TextInput,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../../database/firestore";
@@ -89,6 +90,12 @@ export default function UserLoginScreen({ navigation }) {
 
   return (
     <View style={ styles.mainContainer }>
+      <Image 
+        source={ require('../../assets/logo.jpg') } 
+        resizeMode='contain'
+        style={ styles.logo }
+      />
+
       { renderEmptyFieldWarning() }
 
       <View style={ styles.entry } >
@@ -138,7 +145,14 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     marginHorizontal: '5%',
-    marginTop: '10%',
+  },
+
+  logo: {
+    alignSelf: 'center',
+    aspectRatio: '1/1',
+    flex: 0.4,
+    borderRadius: 10,
+    marginVertical: '5%',
   },
 
   entry: {
@@ -197,7 +211,7 @@ const styles = StyleSheet.create({
   },
 
   helpLinkContainer: {
-    flex: 0.3,
+    flex: 0.2,
     marginTop: '20%',
     borderRadius: 10,
     borderWidth: 5,
