@@ -6,8 +6,9 @@ import {
   addDoc,
 } from 'firebase/firestore';
 import { db, auth } from "../database/firestore";
+import AddChat from './ChatScreens/AddChat';
 
-export default function DBTestProfiles() {
+export default function DBTestProfiles({navigation}) {
 
   let [ events, setEvents] = useState([]);
   
@@ -42,7 +43,13 @@ export default function DBTestProfiles() {
             <Text>Name: { user.data.uFirstname } { user.data.uLastname }</Text>
             <Text>Camp: { user.data.uCamp }</Text>
             <Text>Bio: { user.data.uBio }</Text>
-            <Button title = "Chat" onPress={() => navigation.navigate('AddChat', { userA: auth.currentUser,userB:user.id})} />
+            <Button 
+              title = "Chat"
+              onPress={() => {
+                AddChat(auth.currentUser, user.id, navigation)
+                // navigation.navigate('Chat', {userB:user.id})
+              }}
+            />
           </View>
         ))}
       </View>

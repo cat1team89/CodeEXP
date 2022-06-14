@@ -37,7 +37,7 @@ export default function DBTestEvents() {
 
   return (
         <View>{events.map((event) => (
-            <View key={ event.data.creator_id }>
+            <View key={ event.id }>
                 <Text>Creator: { event.data.creator_id }</Text>
                 <Text>Activity: { event.data.activity_type }</Text>
                 <Text>Date/Time: { event.data.datetime }</Text>

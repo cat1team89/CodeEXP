@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from "@react-navigation/stack";
 import CreateEventScreen from '../EventScreens/CreateEventScreen';
 import UserBaseScreen from '../UserBaseScreen';
 import ViewEventScreen from '../EventScreens/ViewEventScreen';
 import BrowseEvents from '../BrowseEvents';
 import BrowseProfiles from '../BrowseProfiles';
+import Chat from '../ChatScreens/Chat';
 import Chats from '../ChatScreens/Chats';
 
 
@@ -20,11 +22,11 @@ export default function TabBar(props) {
         <tabBar.Navigator>
             <tabBar.Screen
                 name="Profiles"
-                component={() => <BrowseProfiles/>} // TODO: paste in profile menu component JSX
+                component={BrowseProfiles}
             />
             <tabBar.Screen 
                 name="Events"
-                component={() => <BrowseEvents/>} // TODO: paste in events menu component JSX
+                component={BrowseEvents}
             />
             <tabBar.Screen
                 name="+"
@@ -32,7 +34,10 @@ export default function TabBar(props) {
             />
             <tabBar.Screen
                 name="Chats"
-                component={() => <Chats/>} // TODO: paste in past chats list component JSX
+                component={ ChatStack }
+                options={{
+                    headerShown: false,
+                }}
             />
             <tabBar.Screen
                 name="My Profile"
@@ -42,5 +47,45 @@ export default function TabBar(props) {
                 }}
             />
         </tabBar.Navigator>
+    );
+}
+
+const Stack = createStackNavigator();
+
+const ChatStack = (prop) => {
+    // console.log(navigation)
+    console.log(prop)
+    let userB;
+    let toGo;
+    if (prop.route.params) {
+        userB = prop.route.params.userB;
+        toGo = prop.route.params.goToChat;
+    }
+
+    useEffect(()=>{
+        if (prop.route.params) {
+            console.log(toGo);
+            console.log(userB)
+        }
+
+        if (toGo) {
+            prop.navigation.navigate('Chat', {userB:userB})
+        }
+    }, []);
+
+    // const handleInitialRoute = () => {
+    //     if (toGo) {
+    //         return 
+    //     }
+    // }
+
+    return (
+        <Stack.Navigator>
+
+
+            <Stack.Screen name="ChatsList" component={ Chats } />
+            <Stack.Screen name="Chat" component={ Chat } />
+
+        </Stack.Navigator>
     );
 }

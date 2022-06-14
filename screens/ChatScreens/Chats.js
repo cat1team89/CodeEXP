@@ -75,14 +75,23 @@ export default function Chats({navigation}) {
         return (
             <View style = {styles.container}>
             {chats.map((chat) => ( 
-                // eslint-disable-next-line react/jsx-key
+                <View key={ chat.name }>
+
+                {/* // eslint-disable-next-line react/jsx-key */}
                 <div className='contact-details'>
                     <p>{chat.name}</p>
                     <p>{chat.sender}: {chat.last_msg}</p>
                     <p>{(chat.time)}</p>
                     <Button title = "Chat"
-                    onPress={() => navigation.navigate('Chat', { userA: auth.currentUser,userB:chat.sender})} />
+                    onPress={() => {
+                        // console.log(chat);
+                        // console.log(chat.name);
+
+                        navigation.navigate('Chat', { userB:chat.name})
+                    }
+                    } />
                 </div>
+                </View>
             ))}
             </View>
             

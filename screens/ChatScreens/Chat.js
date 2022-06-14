@@ -11,15 +11,20 @@ import {
 import {db, auth} from "../../database/firestore";
 import {onValue, getDatabase, ref, off} from 'firebase/database';
 
-export default function Chat(userA,userB) {
+export default function Chat(/*userA,*/userBprop) {
     // remove once I know how to add the chat file to stack to navigate
-    userA = auth.currentUser;
-    userB = "sam@doe.com";
+    let userA = auth.currentUser;
+    // userB = "sam@doe.com";
+    let userB = userBprop.route.params.userB;
+    console.log(userB)
+    console.log(typeof userB)
+
     var chat_id = getChatID(userA, userB);
     //
     const [Messages,setMessages] = useState([])
 
     useEffect(() => {
+        // console.log('hello')
         getMessages(userA,userB)
         .then((document) => {setMessages(renderMessages(document))})
         .catch(err => console.error(err)); 

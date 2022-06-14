@@ -8,13 +8,18 @@ import {
 } from 'firebase/firestore';
 import {db} from "../../database/firestore";
 
-export default function AddChat(userA,userB) {
+export default function AddChat(userA,userB, navigation) {
+    console.log('hello from addchat')
     var chat_id = getChatID(userA,userB);
-    useEffect(() => {
-        AddChat(userA,userB)
-        .then()
-        .catch(err => console.error(err)); 
-    },[]);
+
+    AddChat(userA,userB)
+    .then(() => {
+        console.log('resolved added chat')
+        navigation.navigate('Chats', {userB:userB, goToChat: true})
+
+    })
+    .catch(err => console.error(err)); 
+
 
     async function AddChat(userA,userB){
         const chatRef = collection(db, 'chatrooms');
@@ -40,11 +45,11 @@ export default function AddChat(userA,userB) {
             participant_details:[
                 {
                     name: userA.email,
-                    uPicPath: userAPicPath,
+                    uPicPath: userAPicPath ? userAPicPath : '',
                 },
                 {
                     name:userB,
-                    uPicPath: userBPicPath,
+                    uPicPath: userBPicPath ? userBPicPath : '',
                 }
             ],
             Messages:[]
@@ -68,6 +73,6 @@ export default function AddChat(userA,userB) {
         return chat_id;
     }
 
-    return (navigation.navigate('Chat', { userA:userA, userB:userB}));
+    // return (navigation.navigate('Chat', { userA:userA, userB:userB}));
 
 }
