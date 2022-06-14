@@ -45,7 +45,6 @@ export default function CreateEventScreen(props) {
     };
 
     useEffect(() => {
-        //const a = getAuth();
         const listener = onAuthStateChanged(auth, async (user) => {
             setIsAuthenticated(!!user);
         });
@@ -74,8 +73,11 @@ export default function CreateEventScreen(props) {
             location: location,
             description: description,
             activity_type: activityType,
+            join_list: {},
         });
     };
+
+
 
     return (
         <SafeAreaView style={styles.bg}>
