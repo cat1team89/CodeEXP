@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, StyleSheet } from 'react-native';
 import { createStackNavigator } from "@react-navigation/stack";
 import { auth, db, storage } from "../../database/firestore";
 import {
@@ -14,7 +14,7 @@ import {
     deleteField
 } from 'firebase/firestore';
 import { icons } from '../../misc/icons';
-import { Button, FlatList } from 'react-native-web';
+import { Button, FlatList, SafeAreaView, ScrollView } from 'react-native-web';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ref, getDownloadURL } from 'firebase/storage';
 
@@ -126,26 +126,70 @@ export default function ViewEventScreen(props) {
         // console.log(event.activity_type);
         return (
             //<Text>{props.id}, {event.title} by {eventCreator.uFirstname} {eventCreator.uLastname}</Text>
-            <View>
-                {icons[event.activity_type].icon}
-                <Text>{event.title}</Text>
-                <Text>When: {event.datetime}</Text>
-                <Text>Where: {event.location}</Text>
-                <Image source={ picUrl } style={{height: 200, width: 250}} />
-                <Text>By: {eventCreator.uFirstname} {eventCreator.uLastname}</Text>
-                <Text>Notes: {event.description}</Text>
-                {
-                    (!(event.creator_id.normalize() === userEmail.normalize())) ? 
-                    <Button title={userIsJoining ? "Can't make it" : "I'm in!"} onPress={handleJoinEventButtonPress}/> :
-                    <Text>You created this event.</Text>
-                }
-                <Text>{errorMessage}</Text>
-                <FlatList
-                    data={participants}
-                    renderItem={({item}) => <Text>{item.uFirstname} {item.uLastname}</Text>}
-                />
-                <Button title="Refresh Participants" onPress={() => getByIdAndSetState(props.id, "event", setEvent)} />
-            </View>
+            <SafeAreaView>
+                <View style={{flexDirection:"row", borderWidth:5, height:200}}>
+                    <View style={{flexDirection:"column", flex: 0.4 }}>
+                        <Image source={ picUrl } style={{height: 100, width: 125}} />
+                        {
+                            (!(event.creator_id.normalize() === userEmail.normalize())) ? 
+                            <Button title={userIsJoining ? "Can't make it" : "I'm in!"} onPress={handleJoinEventButtonPress}/> :
+                            <Text>You created this event.</Text>
+                        }
+                        <Button title="Refresh Participants" onPress={() => getByIdAndSetState(props.id, "event", setEvent)} />
+                    </View>
+
+                    <View style={{flexDirection:"column",flex:1}}>
+
+                        <View style={{flexDirection:"row", flex: 1}}>
+                            {icons[event.activity_type].icon}
+                            <Text>{event.title}</Text>
+                        </View>
+
+                        <View style={{flexDirection:"column", flex: 10}}>
+
+                            <View style={{display:"grid", gridTemplateColumns:'50px auto', flex: 0.3}}>
+                                <Text>By:</Text><Text>{eventCreator.uFirstname} {eventCreator.uLastname}</Text>
+                                <Text>When:</Text><Text>{event.datetime}</Text>
+                                <Text>Where:</Text><Text>{event.location}</Text>
+                                <Text>{event.description ? "Notes:" : ""}</Text><Text>{event.description}</Text>
+                            </View>
+
+                            <View style={{flex: 0.1}}>
+                                <Text >{errorMessage}</Text>
+                            </View>
+
+                            <View style={{flex: 0.1}}>
+                                <Text style={{textAlign:"center"}}>{Object.keys(participants).length} Participant{Object.keys(participants).length === 1 ? "" : "s"}</Text>
+                            </View>
+
+                            <ScrollView contentContainerStyle={{flexGrow:1}} style={{flex:0.5}}>
+                                <FlatList style={{backgroundColor:"#FFE4C4"}}
+                                    data={participants}
+                                    renderItem={
+                                        ({item}) => {
+                                            return (
+                                                <View style={{flexDirection:"row"}}>
+                                                    <Text>{item.uFirstname} {item.uLastname}</Text>
+                                                </View>
+                                            );
+                                        }
+                                    }
+                                />
+                            </ScrollView>
+                        </View>
+
+                    </View>
+                </View>
+            </SafeAreaView>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    horizontal: {
+
+    },
+    vertical: {
+
+    }
+});
