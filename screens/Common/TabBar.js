@@ -4,8 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import CreateEventScreen from '../EventScreens/CreateEventScreen';
 import UserBaseScreen from '../UserBaseScreen';
 import ViewEventScreen from '../EventScreens/ViewEventScreen';
-import BrowseEvents from '../Menu/BrowseEvents';
-import BrowseProfiles from '../Menu/BrowseProfiles';
+import BrowseEvents from '../BrowseEvents';
+import BrowseProfiles from '../BrowseProfiles';
 
 
 /**
