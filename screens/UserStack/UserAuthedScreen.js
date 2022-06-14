@@ -26,6 +26,7 @@ import {
   SairaStencilOne_400Regular,
 } from '@expo-google-fonts/saira-stencil-one';
 import { auth, db, storage } from "../../database/firestore";
+import EditProfileScreen from '../EditProfileScreen';
 
 
 function LoadUserProfile({ navigation }) {
@@ -90,6 +91,7 @@ function LoadUserProfile({ navigation }) {
           </View>
 
           <Text style={ styles.bio } >{ userDetails.bio }</Text>
+
         </View>
       );
     } else {
@@ -125,6 +127,10 @@ export default function UserAuthedScreen({ navigation }) {
       // const parent = navigation.getParent();
       // parent.navigate('Help Lines');
       navigation.navigate('Help Lines');
+    };
+
+    const handleNavEditProfile = () => {
+      navigation.navigate('Edit Profile');
     };
 
     const handleLogout = () => {
@@ -163,6 +169,18 @@ export default function UserAuthedScreen({ navigation }) {
       <Drawer.Screen 
         name="My Profile" 
         component={ LoadUserProfile }
+        options={{
+          headerLeft: false,
+          headerRight: () => (
+            <TouchableOpacity  onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+              <Ionicons name="menu" size={30} color="black" />
+            </TouchableOpacity>
+          ),
+        }}
+      />
+      <Drawer.Screen 
+        name="Edit Profile"
+        component={ EditProfileScreen }
         options={{
           headerLeft: false,
           headerRight: () => (
@@ -227,5 +245,21 @@ const styles = StyleSheet.create({
     width: '80%',
     textAlign: 'center',
     marginBottom: 10,
+  },
+
+  button: {
+    elevation: 8,
+    backgroundColor: "#456789",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginVertical: 10,
+  },
+
+  buttonText: {
+    fontSize: 15,
+    color: "#ffffff",
+    fontWeight: "bold",
+    alignSelf: "center",
   },
 });
