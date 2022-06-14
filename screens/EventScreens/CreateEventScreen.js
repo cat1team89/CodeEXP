@@ -124,7 +124,7 @@ export default function CreateEventScreen(props) {
 
 const styles = StyleSheet.create({
     bg: {
-        backgroundColor:"#5a792c",
+        //backgroundColor:"#5a792c",
         flexDirection: "column",
         alignItems: "center",
     },
