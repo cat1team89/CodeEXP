@@ -9,7 +9,6 @@ import {
     getDoc,
     doc,
 } from 'firebase/firestore';
-import { firestore } from 'firebase-admin';
 import { SafeAreaView, TextInput } from 'react-native-web';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useFocusEffect, useCallback } from '@react-navigation/native';

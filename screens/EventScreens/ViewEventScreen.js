@@ -7,7 +7,6 @@ import {
     getDoc,
     doc
 } from 'firebase/firestore';
-import { firestore } from 'firebase-admin';
 import { icons } from '../../misc/icons';
 
 export default function ViewEvents(props) {

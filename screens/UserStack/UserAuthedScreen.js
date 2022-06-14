@@ -13,7 +13,7 @@ import {
   DrawerItemList,
   DrawerItem
 } from '@react-navigation/drawer';
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import {
   collection,
   doc,
@@ -21,9 +21,16 @@ import {
 } from 'firebase/firestore';
 import { signOut } from "firebase/auth";
 import { ref, getDownloadURL } from 'firebase/storage';
+import {
+  useFonts,
+  SairaStencilOne_400Regular,
+} from '@expo-google-fonts/saira-stencil-one';
 import { auth, db, storage } from "../../database/firestore";
 
+
 function LoadUserProfile({ navigation }) {
+  let [ fontsLoaded ] = useFonts({ SairaStencilOne_400Regular });
+
   let [ userDetails, setUserDetails ] = useState({});
   let [ picUrl, setPicUrl ] = useState('');
   
@@ -50,7 +57,7 @@ function LoadUserProfile({ navigation }) {
         .catch((err) => {
           console.error(err);
         });
-    }
+    };
   }, [userDetails]);
 
   async function getUserInfo(email) {
@@ -62,7 +69,8 @@ function LoadUserProfile({ navigation }) {
       fname: data.uFirstname,
       lname: data.uLastname,
       bio: data.uBio,
-      picpath: data.uPicPath,
+      camp: data.uCamp,
+      picpath: data.uPicPath ? data.uPicPath : null,
     };
   };
 
@@ -71,6 +79,16 @@ function LoadUserProfile({ navigation }) {
       return (
         <View style={ styles.userDetailsContainer } >
           <Text style={ styles.name } >{ userDetails.fname } { userDetails.lname }</Text>
+          
+          <View style={ styles.camp } >
+            <MaterialIcons name="home-work" size={24} color="black" />
+            <Text
+              style={ fontsLoaded ? { fontFamily: 'SairaStencilOne_400Regular', fontSize : 17 } : {fontSize : 17}}
+            >
+              {' '}{ userDetails.camp }
+            </Text>
+          </View>
+
           <Text style={ styles.bio } >{ userDetails.bio }</Text>
         </View>
       );
@@ -103,23 +121,39 @@ const Drawer = createDrawerNavigator();
 
 export default function UserAuthedScreen({ navigation }) {
   function OptionsMenu(props) {
+    const handleNavHelplines = () => {
+      // const parent = navigation.getParent();
+      // parent.navigate('Help Lines');
+      navigation.navigate('Help Lines');
+    };
+
     const handleLogout = () => {
       signOut(auth).then(() => {
-        const parent = navigation.getParent();
-        parent.navigate('userLanding');
+        // const parent = navigation.getParent();
+        // parent.navigate('Sign In');
+        navigation.navigate('Sign In');
+
       });
     };
   
     return (
       <DrawerContentScrollView {...props}>
         <DrawerItemList {...props} />
-        <DrawerItem label="Log Out" onPress={ handleLogout } />
+        <DrawerItem 
+          label="Help Lines" 
+          onPress={ handleNavHelplines } 
+        />
+        <DrawerItem
+          label="Log Out"
+          onPress={ handleLogout }
+        />
       </DrawerContentScrollView>
     );
   };
 
   return (
     <Drawer.Navigator
+      // initialRouteName='My Profile'
       useLegacyImplementation={ true }
       drawerContent={ (props) => (<OptionsMenu {...props} />) }
       screenOptions={{
@@ -127,7 +161,7 @@ export default function UserAuthedScreen({ navigation }) {
       }}
     >
       <Drawer.Screen 
-        name="Profile" 
+        name="My Profile" 
         component={ LoadUserProfile }
         options={{
           headerLeft: false,
@@ -147,9 +181,11 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column', 
     justifyContent: 'space-evenly',
-    backgroundColor: 'lightgrey',
+    backgroundColor: '#d9d9d9',
     borderRadius: '5%',
-    marginVertical: '20%',
+    borderColor: '#5a792c',
+    borderWidth: 3,
+    marginVertical: '15%',
     marginHorizontal: '5%',
   },
 
@@ -163,7 +199,7 @@ const styles = StyleSheet.create({
 
   image: {
     aspectRatio: '1/1',
-    width: '75%',
+    width: '80%',
     borderColor: 'grey',
     borderWidth: 5,
     borderRadius: '100%',
@@ -177,9 +213,13 @@ const styles = StyleSheet.create({
     // borderWidth: 5,
   },
 
+  camp: {
+    flexDirection: 'row',
+    marginBottom: 30,
+  },
+
   name: {
     fontSize: 30,
-    marginBottom: 30,
   },
 
   bio: {
