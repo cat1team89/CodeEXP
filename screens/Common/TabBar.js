@@ -20,11 +20,11 @@ export default function TabBar(props) {
             />
             <tabBar.Screen 
                 name="Events"
-                component={() => <Text>Under Construction</Text>} // TODO: paste in events menu component JSX
+                component={() => <CreateEventScreen/>} // TODO: paste in events menu component JSX
             />
             <tabBar.Screen
                 name="+"
-                component={() => <CreateEventScreen />}
+                component={() => <ViewEventScreen id="pGIQ3dJn3IdhfGfPjJO9"/>}
             />
             <tabBar.Screen
                 name="Chats"
