@@ -18,7 +18,7 @@ import { Button, FlatList } from 'react-native-web';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ref, getDownloadURL } from 'firebase/storage';
 
-export default function ViewEvents(props) {
+export default function ViewEventScreen(props) {
     const convertEmail = (emailString) => emailString.replaceAll(".", "%24");
 
     const [event, setEvent] = useState(null);
@@ -125,6 +125,7 @@ export default function ViewEvents(props) {
         // console.log(eventCreator);
         // console.log(event.activity_type);
         return (
+            //<Text>{props.id}, {event.title} by {eventCreator.uFirstname} {eventCreator.uLastname}</Text>
             <View>
                 {icons[event.activity_type].icon}
                 <Text>{event.title}</Text>
