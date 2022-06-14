@@ -28,11 +28,6 @@ export default function DBTestProfiles() {
   useEffect(() => {
     getEvent(db)
       .then(res => {
-        res.map((user) => {
-          if (user.data && user.data.uFirstName) {
-            user.data.uFirstName = user.data.uFirstName.toString();
-          }
-        })
         setEvents(res);
       })
       .catch(err => console.error(err));
