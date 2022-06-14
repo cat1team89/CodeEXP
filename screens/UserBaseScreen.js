@@ -7,9 +7,7 @@ import UserLoginScreen from './UserStack/UserLoginScreen';
 import UserRegistrationScreen from './UserStack/UserRegistrationScreen';
 import UserAuthedScreen from './UserStack/UserAuthedScreen';
 import HelplineScreen from './UserStack/HelplineScreen';
-import Chat from './ChatScreens/Chat';
-import Chats from './ChatScreens/Chats';
-import BrowseProfiles from './BrowseProfiles';
+import EditProfileScreen from './EditProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -28,13 +26,13 @@ export default function UserBaseScreen() {
     <Stack.Navigator
       initialRouteName={ handleInitialRoute() }
     >
-      <Stack.Screen 
+      {/* <Stack.Screen 
         name="userLanding" 
         component={ UserLandingScreen }
         options={{
           headerShown: false,
         }} 
-      />
+      /> */}
       <Stack.Screen name="Sign In" component={ UserLoginScreen } />
       <Stack.Screen name="Register" component={ UserRegistrationScreen } />
       <Stack.Screen 
@@ -44,10 +42,9 @@ export default function UserBaseScreen() {
           headerShown: false,
         }}
       />
-      {/* <Stack.Screen name="Chat" component={ Chat} />
-      <Stack.Screen name="Chats" component={ Chats } /> */}
-      <Stack.Screen name="Profiles" component={ BrowseProfiles} />
+      {/* <Stack.Screen name="Edit Profile" component={ EditProfileScreen } /> */}
       <Stack.Screen name="Help Lines" component={ HelplineScreen } />
+      
     </Stack.Navigator>
   );
 }
