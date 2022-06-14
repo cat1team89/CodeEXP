@@ -14,7 +14,7 @@ import {
     deleteField
 } from 'firebase/firestore';
 import { icons } from '../../misc/icons';
-import { Button } from 'react-native-web';
+import { Button, FlatList } from 'react-native-web';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ref, getDownloadURL } from 'firebase/storage';
 
@@ -25,6 +25,8 @@ export default function ViewEvents(props) {
     const [eventCreator, setEventCreator] = useState(null);
     const [picUrl, setPicUrl] = useState('');
     const [userIsJoining, setUserIsJoining] = useState(false);
+
+    const [participants, setParticipants] = useState({});
 
     const [userEmail, setUserEmail] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
@@ -47,13 +49,11 @@ export default function ViewEvents(props) {
     }, []);
 
     const getByIdAndSetState = async (id, path, setter) => {
-        console.log("hi with path ", path, id);
         const docSnap = await getDoc(doc(db, path, id));
         if (docSnap.exists()) {
-            console.log(docSnap);
             setter(docSnap.data());
         } else {
-            console.log("ajaj");
+            setErrorMessage("ERROR");
         }
     };
 
@@ -84,6 +84,23 @@ export default function ViewEvents(props) {
             }
         }
     }, [eventCreator]);
+
+    useEffect(async () => {
+        console.log("hi from trying to set participants now");
+        if (event) {
+            const emailArr = [];
+            console.log(Object.keys(event.join_list));
+            for (let i=0; i<Object.keys(event.join_list).length; i++) {
+                const email = Object.keys(event.join_list)[i];
+                const restoredEmail = email.replaceAll("%24", ".");
+                console.log(email)
+                console.log(restoredEmail);
+                console.log(participants);
+                await getByIdAndSetState(restoredEmail, "user", (data) => emailArr.push(data));
+            }
+            setParticipants(emailArr);
+        }
+    }, [event, userIsJoining]);
 
     const handleJoinEventButtonPress = async () => {
         const user = auth.currentUser;
@@ -122,7 +139,11 @@ export default function ViewEvents(props) {
                     <Text>You created this event.</Text>
                 }
                 <Text>{errorMessage}</Text>
-                {}
+                <FlatList
+                    data={participants}
+                    renderItem={({item}) => <Text>{item.uFirstname} {item.uLastname}</Text>}
+                />
+                <Button title="Refresh Participants" onPress={() => getByIdAndSetState(props.id, "event", setEvent)} />
             </View>
         );
     }
