@@ -42,7 +42,7 @@ export default function DBTestProfiles() {
             <Text>Name: { user.data.uFirstname } { user.data.uLastname }</Text>
             <Text>Camp: { user.data.uCamp }</Text>
             <Text>Bio: { user.data.uBio }</Text>
-            <Button title = "Chat"vonPress={() => navigation.navigate('AddChat', { userA: auth.currentUser,userB:user.id})} />
+            <Button title = "Chat" onPress={() => navigation.navigate('AddChat', { userA: auth.currentUser,userB:user.id})} />
           </View>
         ))}
       </View>
