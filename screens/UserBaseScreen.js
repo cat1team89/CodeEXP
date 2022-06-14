@@ -7,6 +7,9 @@ import UserLoginScreen from './UserStack/UserLoginScreen';
 import UserRegistrationScreen from './UserStack/UserRegistrationScreen';
 import UserAuthedScreen from './UserStack/UserAuthedScreen';
 import HelplineScreen from './UserStack/HelplineScreen';
+import Chat from './ChatScreens/Chat';
+import Chats from './ChatScreens/Chats';
+import AddChat from './ChatScreens/AddChat';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +44,9 @@ export default function UserBaseScreen() {
           headerShown: false,
         }}
       />
+      <Stack.Screen name="Chat" component={ Chat} />
+      <Stack.Screen name="Chats" component={ Chats } />
+      <Stack.Screen name="AddChat" component={ AddChat} />
       <Stack.Screen name="Help Lines" component={ HelplineScreen } />
     </Stack.Navigator>
   );

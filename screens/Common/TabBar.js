@@ -6,6 +6,7 @@ import UserBaseScreen from '../UserBaseScreen';
 import ViewEventScreen from '../EventScreens/ViewEventScreen';
 import BrowseEvents from '../BrowseEvents';
 import BrowseProfiles from '../BrowseProfiles';
+import Chats from '../ChatScreens/Chats';
 
 
 /**
@@ -31,7 +32,7 @@ export default function TabBar(props) {
             />
             <tabBar.Screen
                 name="Chats"
-                component={() => <Text>Under Construction</Text>} // TODO: paste in past chats list component JSX
+                component={() => <Chats/>} // TODO: paste in past chats list component JSX
             />
             <tabBar.Screen
                 name="My Profile"
