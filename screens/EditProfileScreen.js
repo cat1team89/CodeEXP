@@ -16,7 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { auth, db, storage } from "../database/firestore";
 
 
-export default function EditProfileScreenTest({ navigation }) {
+export default function EditProfileScreen() {
     let [ fname, setFname ] = useState('');
     let [ lname, setLname ] = useState('');
     let [ bio, setBio ] = useState('');
