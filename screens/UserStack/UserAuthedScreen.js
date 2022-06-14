@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: '5%',
     borderColor: '#5a792c',
     borderWidth: 3,
-    marginVertical: '15%',
+    marginTop: '15%',
     marginHorizontal: '5%',
   },
 
@@ -226,5 +226,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     width: '80%',
     textAlign: 'center',
+    marginBottom: 10,
   },
 });

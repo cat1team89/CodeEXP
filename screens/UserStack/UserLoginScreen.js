@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   },
 
   textPrompt: {
-    flex: 0.25,
+    flex: 0.3,
     textAlign: 'right',
     padding: 10,
     marginRight: 5,
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
 
   textPromptWarn: {
-    flex: 0.25,
+    flex: 0.3,
     textAlign: 'right',
     padding: 10,
     marginRight: 5,
@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    flex: 0.75,
+    flex: 0.7,
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 10,

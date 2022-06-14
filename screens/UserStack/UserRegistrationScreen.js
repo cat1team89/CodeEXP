@@ -273,8 +273,9 @@ export default function UserRegistrationScreen({ navigation }) {
         </TouchableOpacity>
 
       </View>
-      { renderResetImageButton() }
-      { renderImagePreview() }
+
+        { renderImagePreview() }
+        { renderResetImageButton() }
 
       <View style={ styles.entry } >
         <Text style={ styles.textPrompt } >Bio </Text>
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     marginHorizontal: '5%',
-    marginTop: '10%',
+    marginTop: '5%',
   },
 
   entry: {
@@ -312,7 +313,7 @@ const styles = StyleSheet.create({
   },
 
   textPrompt: {
-    flex: 0.25,
+    flex: 0.3,
     // textAlign: 'right',
     padding: 10,
     marginRight: 5,
@@ -320,7 +321,7 @@ const styles = StyleSheet.create({
   },
 
   textPromptWarn: {
-    flex: 0.25,
+    flex: 0.3,
     // textAlign: 'right',
     padding: 10,
     marginRight: 5,
@@ -329,7 +330,7 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    flex: 0.75,
+    flex: 0.7,
     borderColor: "gray",
     // width: "100%",
     borderWidth: 1,
