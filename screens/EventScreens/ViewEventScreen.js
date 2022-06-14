@@ -7,17 +7,12 @@ import {
     getDoc,
     doc
 } from 'firebase/firestore';
-
-/**
- * 
- * props should contain:
- *      id -> id of event being viewed
- *  
- */
+import { icons } from '../../misc/icons';
 
 export default function ViewEvents(props) {
     const [event, setEvent] = useState(null);
     const [eventCreator, setEventCreator] = useState(null);
+    const [ picUrl, setPicUrl ] = useState('');
 
     const getByIdAndSetState = async (id, path, setter) => {
         const docSnap = await getDoc(doc(db, path, id));
@@ -28,6 +23,21 @@ export default function ViewEvents(props) {
 
     useEffect(() => {getByIdAndSetState(props.id, "event", setEvent);}, [props.id]);
     useEffect(() => {if (event) {getByIdAndSetState(event.creator_id, "user", setEventCreator)}}, [event]);
+
+    useEffect(() => {
+        const picPath = eventCreator.picpath;
+        if (picPath) {
+          const picRef = ref(storage, picPath);
+          getDownloadURL(picRef)
+            .then((url) => {
+              console.log(url);
+              setPicUrl(url);
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+        }
+    }, [eventCreator]);
 
 
     if (event == null) {
@@ -40,14 +50,15 @@ export default function ViewEvents(props) {
         );
     } else {
         console.log(eventCreator);
+        console.log(event.activity_type);
         return (
             <View>
-                <Image source={{uri: event.image}} style={{height: 200, width: 250}}/>
+                {icons[event.activity_type].icon}
                 <Text>{event.title}</Text>
                 <Text>When: {event.datetime}</Text>
                 <Text>Where: {event.location}</Text>
-                <Image source={{uri: eventCreator.image}} style={{height: 200, width: 250}} />
-                <Text>By: {eventCreator.name}</Text>
+                <Image source={ picUrl } style={{height: 200, width: 250}} />
+                <Text>By: {eventCreator.uFirstname} {eventCreator.uLastname}</Text>
                 <Text>Notes: {event.description}</Text>
             </View>
         );
