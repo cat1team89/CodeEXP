@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View,Button, StyleSheet } from 'react-native';
+import { View,Button, StyleSheet,Text} from 'react-native';
 import {
   collection,
   getDocs,
@@ -28,6 +28,7 @@ export default function Chats({navigation}) {
         let last_msg = String(null);
         let name = String(null);
         let sender = String(null);
+        console.log(doc.data());
         doc.data().Messages.forEach((msg) => {
             if(msg["datetime"]["seconds"] >= time){
                 time = msg["datetime"]["seconds"];
@@ -73,15 +74,14 @@ export default function Chats({navigation}) {
         })
 
         return (
-            <View style = {styles.container}>
+            <View style = {styles.scroll}>
             {chats.map((chat) => ( 
-                <View key={ chat.name }>
-
+                <View key={ chat.name } style = {styles.container}>
                 {/* // eslint-disable-next-line react/jsx-key */}
                 <div className='contact-details'>
-                    <p>{chat.name}</p>
-                    <p>{chat.sender}: {chat.last_msg}</p>
-                    <p>{(chat.time)}</p>
+                    <Text>{chat.name}</Text>
+                    <Text>{chat.sender}: {chat.last_msg}</Text>
+                    <Text>{(chat.time)}</Text>
                     <Button title = "Chat"
                     onPress={() => {
                         // console.log(chat);
@@ -101,11 +101,14 @@ export default function Chats({navigation}) {
 }
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: 'white',
-      alignItems: 'center',
-      marginBottom: 200,
+      backgroundColor: 'lightgray',
+      alignItems: 'left',
       borderRadius: 20,
       paddingHorizontal: 20,
-      paddingVertical:40
+      paddingVertical:20,
+      margin: 10,
+    },
+    scroll:{ 
+        overflow:scroll,
     },
   });

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, TouchableOpacity } from 'react-native';
+import { View, Text, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import {
   collection,
   getDocs,
@@ -7,6 +7,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from "../database/firestore";
 import AddChat from './ChatScreens/AddChat';
+import { ScrollView } from 'react-native-web';
 
 export default function DBTestProfiles({navigation}) {
 
@@ -38,11 +39,12 @@ export default function DBTestProfiles({navigation}) {
   return (
     <View>
       <View>{events.map((user) => (
-          <View key={ user.id }>
+          <View key={ user.id } style = {styles.container}>
             <Text>ID: { user.id }</Text>
             <Text>Name: { user.data.uFirstname } { user.data.uLastname }</Text>
             <Text>Camp: { user.data.uCamp }</Text>
             <Text>Bio: { user.data.uBio }</Text>
+           <View> 
             <Button 
               title = "Chat"
               onPress={() => {
@@ -50,9 +52,20 @@ export default function DBTestProfiles({navigation}) {
                 // navigation.navigate('Chat', {userB:user.id})
               }}
             />
+            </View>
           </View>
         ))}
       </View>
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: 'lightgray',
+    alignItems: 'left',
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    paddingVertical:20,
+    margin: 10,
+  },
+});
