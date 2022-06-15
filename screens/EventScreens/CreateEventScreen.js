@@ -91,29 +91,30 @@ export default function CreateEventScreen(props) {
 
             <View style={styles.entry}>
             <Text>Location:</Text>
-            <TextInput
+            <TextInput style={styles.inputField}
                 onChangeText={setLocation}
             />
             </View>
 
             <View style={styles.entry}>
             <Text>Description:</Text>
-            <TextInput
+            <TextInput style={styles.inputField}
                 onChangeText={setDescription}
             />
             </View>
 
-            <View style={styles.entry}>
-                {activityTypeIcon}
-                <Picker
-                    selectedValue={activityType}
-                    onValueChange={(itemValue, itemIndex) => setActivityType(itemValue)}
-                >
-                    {Object.entries(icons).map(([keyString, val]) => <Picker.Item label={val.text} value={keyString} key={keyString}/>)}
-                </Picker>
+            <View>
+                <Text>What kind of event is it?</Text>
+                <View style={styles.entry}>
+                    {activityTypeIcon}
+                    <Picker
+                        selectedValue={activityType}
+                        onValueChange={(itemValue, itemIndex) => setActivityType(itemValue)}
+                    >
+                        {Object.entries(icons).map(([keyString, val]) => <Picker.Item label={val.text} value={keyString} key={keyString}/>)}
+                    </Picker>
+                </View>
             </View>
-
-            <Button title="test" onPress={() => console.log(icons[activityType].text)} />
 
             <Button title="Create Event" onPress={submitHandler} />
 
@@ -132,6 +133,7 @@ const styles = StyleSheet.create({
         backgroundColor:"#d9d9d9",
         flexDirection:"row",
         alignItems: "center",
+        marginVertical: 20,
     },
     inputField: {
         backgroundColor:"#ffffff",

@@ -14,7 +14,8 @@ import {
     deleteField
 } from 'firebase/firestore';
 import { icons } from '../../misc/icons';
-import { Button, FlatList, SafeAreaView, ScrollView } from 'react-native-web';
+import { FlatList, SafeAreaView, ScrollView } from 'react-native-web';
+import { Button } from 'react-native-elements';
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { ref, getDownloadURL } from 'firebase/storage';
 
@@ -126,16 +127,16 @@ export default function ViewEventScreen(props) {
         // console.log(event.activity_type);
         return (
             //<Text>{props.id}, {event.title} by {eventCreator.uFirstname} {eventCreator.uLastname}</Text>
-            <SafeAreaView>
-                <View style={{flexDirection:"row", borderWidth:5, height:200}}>
+            <SafeAreaView style={styles.container}>
+                <View style={{flexDirection:"row", height:200}}>
                     <View style={{flexDirection:"column", flex: 0.4 }}>
-                        <Image source={ picUrl } style={{height: 100, width: 125}} />
+                        <Image source={ picUrl } style={{height: 75, width: 93.75}} />
                         {
                             (!(event.creator_id.normalize() === userEmail.normalize())) ? 
-                            <Button title={userIsJoining ? "Can't make it" : "I'm in!"} onPress={handleJoinEventButtonPress}/> :
+                            <Button titleStyle={{color: "white",fontSize: 10}} title={userIsJoining ? "Can't make it" : "I'm in!"} onPress={handleJoinEventButtonPress}/> :
                             <Text>You created this event.</Text>
                         }
-                        <Button title="Refresh Participants" onPress={() => getByIdAndSetState(props.id, "event", setEvent)} />
+                        <Button titleStyle={{color: "white",fontSize: 10}} title="Refresh Participants" onPress={() => getByIdAndSetState(props.id, "event", setEvent)} />
                     </View>
 
                     <View style={{flexDirection:"column",flex:1}}>
@@ -187,9 +188,17 @@ export default function ViewEventScreen(props) {
 
 const styles = StyleSheet.create({
     horizontal: {
-
+    
     },
     vertical: {
 
-    }
+    },
+    container: {
+        backgroundColor: 'lightgray',
+        alignItems: 'left',
+        borderRadius: 20,
+        paddingHorizontal: 20,
+        paddingVertical:20,
+        margin: 10,
+    },
 });
