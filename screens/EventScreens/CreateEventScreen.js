@@ -26,6 +26,7 @@ export default function CreateEventScreen(props) {
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState(null);
+    const [dateAndTime, setDateAndTime] = useState("");
 
     /* State variables used internally by dropdown list */
     const [activityType, setActivityType] = useState("nightOut");
@@ -68,7 +69,7 @@ export default function CreateEventScreen(props) {
         setErrorMessage("");
         await addDoc(collection(db, "event"), {
             creator_id: userId,
-            datetime: new Date().toLocaleString(),
+            datetime: dateAndTime,
             title: title,
             location: location,
             description: description,
@@ -91,29 +92,37 @@ export default function CreateEventScreen(props) {
 
             <View style={styles.entry}>
             <Text>Location:</Text>
-            <TextInput
+            <TextInput style={styles.inputField}
                 onChangeText={setLocation}
             />
             </View>
 
             <View style={styles.entry}>
-            <Text>Description:</Text>
-            <TextInput
-                onChangeText={setDescription}
+            <Text>Date/Time of event:</Text>
+            <TextInput style={styles.inputField}
+                onChangeText={setDateAndTime}
             />
             </View>
 
             <View style={styles.entry}>
-                {activityTypeIcon}
-                <Picker
-                    selectedValue={activityType}
-                    onValueChange={(itemValue, itemIndex) => setActivityType(itemValue)}
-                >
-                    {Object.entries(icons).map(([keyString, val]) => <Picker.Item label={val.text} value={keyString} key={keyString}/>)}
-                </Picker>
+            <Text>Description:</Text>
+            <TextInput style={styles.inputField}
+                onChangeText={setDescription}
+            />
             </View>
 
-            <Button title="test" onPress={() => console.log(icons[activityType].text)} />
+            <View>
+                <Text>What kind of event is it?</Text>
+                <View style={styles.entry}>
+                    {activityTypeIcon}
+                    <Picker
+                        selectedValue={activityType}
+                        onValueChange={(itemValue, itemIndex) => setActivityType(itemValue)}
+                    >
+                        {Object.entries(icons).map(([keyString, val]) => <Picker.Item label={val.text} value={keyString} key={keyString}/>)}
+                    </Picker>
+                </View>
+            </View>
 
             <Button title="Create Event" onPress={submitHandler} />
 
@@ -132,6 +141,7 @@ const styles = StyleSheet.create({
         backgroundColor:"#d9d9d9",
         flexDirection:"row",
         alignItems: "center",
+        marginVertical: 20,
     },
     inputField: {
         backgroundColor:"#ffffff",
