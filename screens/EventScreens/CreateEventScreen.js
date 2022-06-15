@@ -26,6 +26,7 @@ export default function CreateEventScreen(props) {
     const [location, setLocation] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState(null);
+    const [dateAndTime, setDateAndTime] = useState("");
 
     /* State variables used internally by dropdown list */
     const [activityType, setActivityType] = useState("nightOut");
@@ -68,7 +69,7 @@ export default function CreateEventScreen(props) {
         setErrorMessage("");
         await addDoc(collection(db, "event"), {
             creator_id: userId,
-            datetime: new Date().toLocaleString(),
+            datetime: dateAndTime,
             title: title,
             location: location,
             description: description,
@@ -93,6 +94,13 @@ export default function CreateEventScreen(props) {
             <Text>Location:</Text>
             <TextInput style={styles.inputField}
                 onChangeText={setLocation}
+            />
+            </View>
+
+            <View style={styles.entry}>
+            <Text>Date/Time of event:</Text>
+            <TextInput style={styles.inputField}
+                onChangeText={setDateAndTime}
             />
             </View>
 
